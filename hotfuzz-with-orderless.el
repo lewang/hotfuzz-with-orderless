@@ -54,6 +54,8 @@
 ;;
 
 ;; To use this style, prepend `hotfuzz-with-orderless' to `completion-styles'.
+;;
+;;
 
 ;;; Code:
 
@@ -106,3 +108,5 @@
 				   "use hotfuzz if no space, else dispatch to orderless."))
   ;; Why is the Emacs completion API so cursed?
   (put 'hotfuzz-with-orderless 'completion--adjust-metadata #'hotfuzz--adjust-metadata))
+
+(provide 'hotfuzz-with-orderless)
