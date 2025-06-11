@@ -83,7 +83,7 @@
                                     order-less-not-if-bang))
 
 (defun hotfuzz-with-orderless--dispatch (n str)
- "Use hotfuzz Nth function from completion-styles-alist if there is no space in STRING, else use orderless"
+ "Use hotfuzz Nth function from completion-styles-alist if there is no space in STR, else use orderless"
   (let ((hotfuzz-fn (nth n (assoc 'hotfuzz completion-styles-alist)))
 	(orderless-fn (nth n (assoc 'orderless completion-styles-alist))))
     (if (string-match-p " " str)
@@ -96,7 +96,7 @@
   (apply (hotfuzz-with-orderless--dispatch 1 str) str args))
 
 ;;;###autoload
-(defun hotfuzz-with-orderless-all-completions (&rest args)
+(defun hotfuzz-with-orderless-all-completions (str &rest args)
   "dispatch between hotfuzz and orderless"
   (apply (hotfuzz-with-orderless--dispatch 2 str) str args))
 
