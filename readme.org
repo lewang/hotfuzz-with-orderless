@@ -21,15 +21,26 @@ order.
 * Why together?
 
 Hotfuzz and earlier (and slower) flx algorithm offer excellent sorting. It
-allows the user to always type forward and bubble up the best completion by
-continuuing typing instead of adjusting completion strategies.
+allows the user to **always type forward**. The score of target completion
+improves without manipulating the point or pressing C-p or C-n.
+
+It sounds trivial, but as the user develops scoring intuition, it can
+feel quite magical.
+
+The score based sorting can occasionally narrow to a target you didn't intend,
+especially for a large array to complete against.
+
+This is where orderless filtering comes in. The user can press space and type
+more words to filter the completions with orderless.
+
+** Other considerations
 
 Orderless has builtin `orderless-flex' style, which does matching without
 sorting. Sorting really is mandatory to make flex search useful.
 
 Orderless also has builtin `orderless-initialism' style, which completes
 strictly as initials, which is not flexible or powerful enough to be
-generallh useful.
+generally useful.
 
 * How do hotfuzz and orderless work together?
 
@@ -45,3 +56,9 @@ generallh useful.
 
 `orderless-flex' will redo the work hotfuzz did to filter the collection. In
 practice this is not noticeable.
+
+* future dev
+
+1. invert logic so orderless does filtering before hotfuzz does scoring
+2. remove [[https://www.reddit.com/r/emacs/comments/1l8kas3/completion_experiment_hotfuzzwithorderless/mx6apf4/][duplicated work]]
+3. look into possibility of using historical items to give some hotfuzz scores a boost
