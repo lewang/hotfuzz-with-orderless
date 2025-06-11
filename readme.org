@@ -1,0 +1,47 @@
+
+# EXPERIMENTAL WARNING
+
+This is experimental.
+
+---
+
+
+What is hotfuzz?
+
+`flex' style, but with a better scoring algorithm. Specifically, it is
+non-greedy and ranks completions that match at word; path component; or
+camelCase boundaries higher.
+
+What is orderless?
+
+Orderless completion style divides the pattern into space-separated
+components, and matches candidates that match all of the components in any
+order.
+
+Why together?
+
+Hotfuzz and earlier (and slower) flx algorithm offer excellent sorting. It
+allows the user to always type forward and bubble up the best completion by
+continuuing typing instead of adjusting completion strategies.
+
+Orderless has builtin `orderless-flex' style, which does matching without
+sorting. Sorting really is mandatory to make flex search useful.
+
+Orderless also has builtin `orderless-initialism' style, which completes
+strictly as initials, which is not flexible or powerful enough to be
+generallh useful.
+
+How do hotfuzz and orderless work together?
+
+1. Starting typing query, hotfuzz is used for superior sorting.
+2. Press space, and orderless takes over, but treats the first word before
+   space as `orderless-flex'.
+3. Note this combination means completions can be filter by a list of space
+   separated words (i.e. the default orderless usage). However, the first
+   word has special powers.
+
+
+What's the compromise?
+
+`orderless-flex' will redo the work hotfuzz did to filter the collection. In
+practice this is not noticeable.
