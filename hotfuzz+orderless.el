@@ -65,8 +65,8 @@
 ;;;###autoload
 (progn
   (add-to-list 'completion-styles-alist
-               '( hotfuzz+orderless orderless-try-completion hotfuzz+orderless-all-completions
-                  "Filter first component with Hotfuzz, rest with Orderless."))
+               '(hotfuzz+orderless orderless-try-completion hotfuzz+orderless-all-completions
+				   "Filter first component with Hotfuzz, rest with Orderless."))
   (put 'hotfuzz+orderless 'completion--adjust-metadata #'hotfuzz--adjust-metadata))
 
 (provide 'hotfuzz+orderless)
