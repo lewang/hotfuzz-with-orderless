@@ -21,6 +21,22 @@
 (require 'hotfuzz)
 (require 'orderless)
 
+
+(defun hotfuzz+orderless--split (str)
+  "Split string into two (hotfuzz-query . orderless-query).
+
+`hotfuzz-query' is the first word.
+`orderless-query' is the remainder, or the entire word if str starts with a space"
+  (pcase str
+    ((rx string-start
+	  (let hotfuzz-query
+	    (or (seq (+ (not ? )) (* ? ))
+		(+ ? )))
+	  (let orderless-query
+	    (* anychar)))
+     (list (string-trim hotfuzz-query) (string-trim orderless-query)) )))
+
+
 (defun hotfuzz+orderless [str]
   (let* ((orderless-start (progn
 			    (string-match (rx string-start
