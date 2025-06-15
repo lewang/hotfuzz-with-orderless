@@ -29,38 +29,33 @@
 `orderless-query' is the remainder, or the entire word if str starts with a space"
   (pcase str
     ((rx string-start
-	  (let hotfuzz-query
-	    (or (seq (+ (not ? )) (* ? ))
-		(+ ? )))
+	 (let hotfuzz-query
+	   (seq (* (not ? ))
+		(or (* ? ) string-end)))
 	  (let orderless-query
 	    (* anychar)))
-     (list (string-trim hotfuzz-query) (string-trim orderless-query)) )))
-
-
-(defun hotfuzz+orderless [str]
-  (let* ((orderless-start (progn
-			    (string-match (rx string-start
-					      (or (seq (+ word) (* ? ))
-						  (+ ? )))
-					  str)
-			    (match-end 0)))
-	 (orderless-str (substring str orderless-start))
-	 (hotfuzz-str (string-trim (substring str 0 orderless-start))))
-    (list)
-    (hotfuzz-all-completions hotfuzz-str orderless-completions pred (length hotfuzz-str))))
+     (cons (string-trim hotfuzz-query) (string-trim orderless-query)))))
 
 ;;;###autoload
 (defun hotfuzz+orderless-all-completions (str table pred pt)
-  (let* ((orderless-start (progn
-			    (string-match (rx string-start
-					      (or (seq (+ word) (* ? ))
-						  (+ ? )))
-					  str)
-			    (match-end 0)))
-	 (orderless-str (substring str orderless-start))
-	 (hotfuzz-str (string-trim (substring str 0 orderless-start)))
-	 (orderless-completions (orderless-all-completions orderless-str table pred (length orderless-str))))
-    (hotfuzz-all-completions hotfuzz-str orderless-completions pred (length hotfuzz-str))))
+  (message "hotfuzz+orderless-all-completions args %S" (list str table pred pt))
+  (pcase-let* ((`(,hotfuzz-query . ,orderless-query) (hotfuzz+orderless--split str))
+	       ;; nconc removex replaces cdr of list with nil
+	       (orderless-completions (nconc (orderless-all-completions orderless-query table pred (length orderless-query))
+					     nil)))
+    (message "orderless-completions: %S" orderless-completions)
+    (defvar le::mid orderless-completions)
+    (defvar le::pred pred)
+    ;; (hotfuzz-all-completions hotfuzz-query
+    ;; 			     orderless-completions
+    ;; 			     pred
+    ;; 			     (length hotfuzz-query))
+    (hotfuzz-all-completions hotfuzz-query
+			     table
+			     pred
+			     (length hotfuzz-query))))
+
+(hotfuzz-all-completions "ab" le::mid le::pred)
 
 ;;;###autoload
 (progn
