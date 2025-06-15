@@ -45,6 +45,7 @@
 					     nil)))
     (message "orderless-completions: %S" orderless-completions)
     (defvar le::mid orderless-completions)
+    (defvar le::t table)
     (defvar le::pred pred)
     ;; (hotfuzz-all-completions hotfuzz-query
     ;; 			     orderless-completions
@@ -54,8 +55,6 @@
 			     table
 			     pred
 			     (length hotfuzz-query))))
-
-(hotfuzz-all-completions "ab" le::mid le::pred)
 
 ;;;###autoload
 (progn
