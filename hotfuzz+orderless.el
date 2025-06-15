@@ -38,21 +38,15 @@
 
 ;;;###autoload
 (defun hotfuzz+orderless-all-completions (str table pred pt)
-  (message "hotfuzz+orderless-all-completions args %S" (list str table pred pt))
   (pcase-let* ((`(,hotfuzz-query . ,orderless-query) (hotfuzz+orderless--split str))
-	       ;; nconc removex replaces cdr of list with nil
+	       ;; nconc replaces cdr of list with nil, it may be a sentinel number otherwise
 	       (orderless-completions (nconc (orderless-all-completions orderless-query table pred (length orderless-query))
 					     nil)))
-    (message "orderless-completions: %S" orderless-completions)
     (defvar le::mid orderless-completions)
     (defvar le::t table)
     (defvar le::pred pred)
-    ;; (hotfuzz-all-completions hotfuzz-query
-    ;; 			     orderless-completions
-    ;; 			     pred
-    ;; 			     (length hotfuzz-query))
     (hotfuzz-all-completions hotfuzz-query
-			     table
+			     orderless-completions
 			     pred
 			     (length hotfuzz-query))))
 
